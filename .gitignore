@@ -1,0 +1,6 @@
+# Dependencias (se regeneran con npm install)
+node_modules/
+
+# Builds (se regeneran con npm run build)
+dist/
+.next/
