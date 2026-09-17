@@ -4,3 +4,18 @@ node_modules/
 # Builds (se regeneran con npm run build)
 dist/
 .next/
+out/
+
+# Variables de entorno (contienen secretos - NUNCA se suben)
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo / editor
+.DS_Store
+Thumbs.db
+.vscode/
