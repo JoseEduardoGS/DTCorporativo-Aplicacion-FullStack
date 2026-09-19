@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Lint del backend
+        run: npm run lint --workspace=apps/api --if-present
+
+      - name: Lint del frontend
+        run: npm run lint --workspace=apps/web
+
+      - name: Build del backend
+        run: npm run build --workspace=apps/api
+
+      - name: Build del frontend
+        run: npm run build --workspace=apps/web
