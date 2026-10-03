@@ -19,3 +19,12 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 .vscode/
+
+apps/api/src/generated/
+
+# Carpetas de "skills" para agentes de IA (generadas automáticamente por Prisma init)
+.agents/
+.claude/
+.windsurf/
+.cursor/
+skills-lock.json
