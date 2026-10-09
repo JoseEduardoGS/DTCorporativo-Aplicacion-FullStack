@@ -45,29 +45,39 @@ authRouter.post("/login", async (req, res) => {
   });
 });
 
-authRouter.post("/refresh", (req, res) => {
+authRouter.post("/refresh", async (req, res) => {
   const { refreshToken } = req.cookies;
 
   if (!refreshToken) {
     return res.status(401).json({ error: { message: "No hay sesión activa" } });
   }
 
+  let payload: { userId: string; rol: string };
   try {
-    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET!) as {
+    payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET!) as {
       userId: string;
       rol: string;
     };
-
-    const nuevoAccessToken = jwt.sign(
-      { userId: payload.userId, rol: payload.rol },
-      process.env.JWT_ACCESS_SECRET!,
-      { expiresIn: "15m" }
-    );
-
-    res.json({ accessToken: nuevoAccessToken });
   } catch {
     return res.status(401).json({ error: { message: "Sesión inválida o expirada" } });
   }
+
+  const usuario = await prisma.usuario.findUnique({
+    where: { id: payload.userId },
+    include: { rol: true },
+  });
+
+  if (!usuario || !usuario.activo) {
+    return res.status(401).json({ error: { message: "Sesión inválida o expirada" } });
+  }
+
+  const nuevoAccessToken = jwt.sign(
+    { userId: usuario.id, rol: usuario.rol.nombre },
+    process.env.JWT_ACCESS_SECRET!,
+    { expiresIn: "15m" }
+  );
+
+  res.json({ accessToken: nuevoAccessToken });
 });
 
 authRouter.post("/logout", (_req, res) => {
