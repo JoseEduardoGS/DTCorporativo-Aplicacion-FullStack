@@ -22,3 +22,10 @@ export const actualizarUsuarioSchema = z
 
 export type CrearUsuarioInput = z.infer<typeof crearUsuarioSchema>;
 export type ActualizarUsuarioInput = z.infer<typeof actualizarUsuarioSchema>;
+
+export interface UsuarioSesion {
+  id: string;
+  nombre: string;
+  email: string;
+  rol: NombreRol;
+}
