@@ -77,7 +77,15 @@ authRouter.post("/refresh", async (req, res) => {
     { expiresIn: "15m" }
   );
 
-  res.json({ accessToken: nuevoAccessToken });
+  res.json({ 
+    accessToken: nuevoAccessToken,
+    usuario: {
+      id: usuario.id,
+      nombre: usuario.nombre,
+      email: usuario.email,
+      rol: usuario.rol.nombre,
+    },
+  });
 });
 
 authRouter.post("/logout", (_req, res) => {
